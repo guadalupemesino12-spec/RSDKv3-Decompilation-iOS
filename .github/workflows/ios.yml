@@ -218,7 +218,8 @@ jobs:
           tar xzf "$TARBALL" -C /tmp/tinyxml2_src --strip-components=1
           cp /tmp/tinyxml2_src/tinyxml2.h ios-deps/include/tinyxml2.h
 
-          perl -i -pe 's/RETRO_PLATFORM == RETRO_OSX\b/RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_iOS/g' RSDKv3/ModAPI.cpp
+          perl -i -pe 's/sprintf\(modBuf, "%smods", modsPath\);/sprintf(modsPath, "%s", gamePath); sprintf(modBuf, "%smods", modsPath);/g' RSDKv3/ModAPI.cpp
+
 
           INCLUDES="-Iios-deps/include -Iios-deps/include/SDL2 -Iios-deps/include/vorbis -Iios-deps/include/ogg -Iios-deps/include/theora -ISonicCDDecomp -Idependencies/all/theoraplay -Idependencies/mac"
 
