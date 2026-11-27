@@ -219,6 +219,9 @@ jobs:
           cp /tmp/tinyxml2_src/tinyxml2.h ios-deps/include/tinyxml2.h
 
           perl -i -pe 's/sprintf\(modBuf, "%smods", modsPath\);/sprintf(modsPath, "%s", gamePath); sprintf(modBuf, "%smods", modsPath);/g' RSDKv3/ModAPI.cpp
+          perl -i -pe 's/std::string mod_config = modPath\.string\(\) \+ "\/modconfig\.ini";/std::string mod_config = "mods\/modconfig.ini";/g' RSDKv3/ModAPI.cpp
+          perl -i -pe 's/const std::string modDir = modsPath \+ "\/" \+ folder;/const std::string modDir = "mods\/" + folder;/g' RSDKv3/ModAPI.cpp
+          perl -i -pe 's/info->fileMap\.insert\(std::pair<std::string, std::string>\(pathLower, modBuf\)\);/std::string relModFile = std::string("mods\/") + info->folder + "\/" + path; info->fileMap.insert(std::pair<std::string, std::string>(pathLower, relModFile));/g' RSDKv3/ModAPI.cpp
 
 
           INCLUDES="-Iios-deps/include -Iios-deps/include/SDL2 -Iios-deps/include/vorbis -Iios-deps/include/ogg -Iios-deps/include/theora -ISonicCDDecomp -Idependencies/all/theoraplay -Idependencies/mac"
