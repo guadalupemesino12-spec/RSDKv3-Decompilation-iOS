@@ -219,10 +219,8 @@ jobs:
           cp /tmp/tinyxml2_src/tinyxml2.h ios-deps/include/tinyxml2.h
 
           perl -i -pe 's/sprintf\(modBuf, "%smods", modsPath\);/sprintf(modsPath, "%s", gamePath); sprintf(modBuf, "%smods", modsPath);/g' RSDKv3/ModAPI.cpp
-          perl -i -pe 's/IniParser modConfig\(mod_config\.c_str\(\), false\);/IniParser modConfig("mods\/modconfig.ini", false);/g' RSDKv3/ModAPI.cpp
-          perl -i -pe 's/IniParser modSettings\(\(modDir \+ "\/mod\.ini"\)\.c_str\(\), false\);/IniParser modSettings(("mods\/" + folder + "\/mod.ini").c_str(), false);/g' RSDKv3/ModAPI.cpp
-          perl -i -pe 's/modConfig\.Write\(mod_config\.c_str\(\), false\);/modConfig.Write("mods\/modconfig.ini", false);/g' RSDKv3/ModAPI.cpp
-
+          perl -i -pe 's/sprintf\(pathBuffer, "%s%s", gamePath, filename\);/if (filename[0] == '\''\/'\'') sprintf(pathBuffer, "%s", filename); else sprintf(pathBuffer, "%s%s", gamePath, filename);/g' RSDKv3/Ini.cpp
+          perl -i -pe 's/sprintf\(fullFilePath, "%s%s", gamePath, filePath\);/if (filePath[0] == '\''\/'\'') sprintf(fullFilePath, "%s", filePath); else sprintf(fullFilePath, "%s%s", gamePath, filePath);/g' RSDKv3/Reader.cpp
 
 
           INCLUDES="-Iios-deps/include -Iios-deps/include/SDL2 -Iios-deps/include/vorbis -Iios-deps/include/ogg -Iios-deps/include/theora -ISonicCDDecomp -Idependencies/all/theoraplay -Idependencies/mac"
