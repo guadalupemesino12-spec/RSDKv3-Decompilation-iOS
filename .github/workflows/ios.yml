@@ -219,7 +219,10 @@ jobs:
           cp /tmp/tinyxml2_src/tinyxml2.h ios-deps/include/tinyxml2.h
 
           perl -i -pe 's/sprintf\(modBuf, "%smods", modsPath\);/sprintf(modsPath, "%s", gamePath); sprintf(modBuf, "%smods", modsPath);/g' RSDKv3/ModAPI.cpp
-          perl -i -pe 's/char pathBuffer\[0x80\];/char pathBuffer[0x400];/g' RSDKv3/Ini.cpp
+          perl -i -pe 's/0x80/0x400/g' RSDKv3/Ini.cpp
+          perl -i -pe 's/0x100/0x400/g' RSDKv3/ModAPI.cpp
+          perl -i -pe 's/0x100/0x400/g' RSDKv3/Reader.cpp
+
 
 
 
