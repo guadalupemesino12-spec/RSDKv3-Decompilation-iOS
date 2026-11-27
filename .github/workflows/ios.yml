@@ -212,10 +212,10 @@ jobs:
 
       - name: Build tinyxml2 and ModAPI for iOS
         run: |
-          URL="https:/""/://github.com"
-          git clone --depth 1 "$URL" /tmp/tinyxml2
-          cp /tmp/tinyxml2/tinyxml2.h ios-deps/include/tinyxml2.h
-          cp /tmp/tinyxml2/tinyxml2.cpp /tmp/tinyxml2.cpp
+          brew install tinyxml2
+          BREW_PREFIX=$(brew --prefix tinyxml2)
+          cp "$BREW_PREFIX/include/tinyxml2.h" ios-deps/include/tinyxml2.h
+          cp "$BREW_PREFIX/lib/libtinyxml2.a" /tmp/libtinyxml2_mac.a || true
 
           perl -i -pe 's/RETRO_PLATFORM == RETRO_OSX\b/RETRO_PLATFORM == RETRO_OSX || RETRO_PLATFORM == RETRO_iOS/g' RSDKv3/ModAPI.cpp
 
@@ -223,16 +223,10 @@ jobs:
           xcrun -sdk iphoneos clang++ -arch arm64 -std=gnu++14 -miphoneos-version-min=13.0 -isysroot $SDK_PATH \
             -DRETRO_USING_OPENGL=0 -DRETRO_USE_MOD_LOADER=1 \
             -Iios-deps/include -Iios-deps/include/SDL2 -Iios-deps/include/vorbis -Iios-deps/include/ogg -Iios-deps/include/theora -ISonicCDDecomp -Idependencies/all/theoraplay \
-            -c /tmp/tinyxml2.cpp -o /tmp/tinyxml2.o
-          xcrun -sdk iphoneos clang++ -arch arm64 -std=gnu++14 -miphoneos-version-min=13.0 -isysroot $SDK_PATH \
-            -DRETRO_USING_OPENGL=0 -DRETRO_USE_MOD_LOADER=1 \
-            -Iios-deps/include -Iios-deps/include/SDL2 -Iios-deps/include/vorbis -Iios-deps/include/ogg -Iios-deps/include/theora -ISonicCDDecomp -Idependencies/all/theoraplay \
             -c RSDKv3/ModAPI.cpp -o /tmp/ModAPI.o
           xcrun -sdk iphoneos clang++ -arch arm64 -std=gnu++14 -miphoneos-version-min=13.0 -isysroot $SDK_PATH \
             -c /tmp/savepath_ios.cpp -o /tmp/savepath_ios.o
-          ar rcs dependencies/ios/libModAPIStub.a /tmp/tinyxml2.o /tmp/ModAPI.o /tmp/savepath_ios.o
-
-
+          ar rcs dependencies/ios/libModAPIStub.a /tmp/ModAPI.o /tmp/
 
       - name: Build RSDKv3 iOS
         run: |
